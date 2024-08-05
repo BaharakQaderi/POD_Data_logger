@@ -6,3 +6,30 @@ What I am basically doing is that
 
 
 https://github.com/BaharakQaderi/POD_Data_logger
+
+
+import RPi.GPIO as GPIO  # Import the RPi.GPIO library
+
+GPIO_PIN = 4  # Set this to your GPIO pin number
+GPIO.setmode(GPIO.BCM)  # Use Broadcom pin numbering
+GPIO.setup(GPIO_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # Set the pin as an input
+
+# In your main loop:
+gpio_value = GPIO.input(GPIO_PIN)  # Read the value of the GPIO pin
+data_buffer.append([datetime.now(), net_weight_float, gpio_value])  # Append the GPIO value to the data buffer
+
+# When writing to the CSV file:
+csv_writer.writerow(['Timestamp', 'Net Weight', 'GPIO Value'])  # Add a new column for the GPIO value
+csv_writer.writerow([datetime.now(), net_weight_float, gpio_value])  # Write the GPIO value to the CSV file
+
+# When writing the buffer to the CSV file:
+csv_writer.writerows(data_buffer)  # This will now include the GPIO value
+
+
+
+Remember to clean up the GPIO settings at the end of your script to avoid warnings when you run your script again:
+GPIO.cleanup()  # Clean up GPIO settings
+
+change also this:
+
+datetime.utcnow()
