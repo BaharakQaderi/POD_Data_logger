@@ -1,0 +1,23 @@
+aiohttp==3.9.5
+aiosignal==1.3.1
+attrs==23.2.0
+click==8.1.7
+colorama==0.4.6
+frozenlist==1.4.1
+idna==3.7
+keyboard==0.13.5
+markdown-it-py==3.0.0
+mdurl==0.1.2
+multidict==6.0.5
+prompt_toolkit==3.0.47
+Pygments==2.18.0
+pymodbus==3.6.9
+pymodbus_repl @ git+https://github.com/pymodbus-dev/repl@0808283e9adc323c3d54d345468cda73b399d2ec
+pyserial==3.5
+rich==13.7.1
+shellingham==1.5.4
+tabulate==0.9.0
+typer==0.9.4
+typing_extensions==4.12.2
+wcwidth==0.2.13
+yarl==1.9.4

@@ -1,0 +1,112 @@
+utc time stamp we need to add no problem since I can always convert it to different version,
+make it automatic runing when we connect the raspbery pi and see how it's workiong on the, done! 
+What I did basically create a service as soon as the pi is powered the script start runing and log the data and save it to a csv file and the interval is like 0.2sec
+and the whole procedure of the creating service on linux. it's from the copiole
+To make your Python script run automatically at startup on a Raspberry Pi, you can use the `crontab` or create a systemd service. Here's how to do both:
+
+### Using Crontab
+
+1. Open the terminal on your Raspberry Pi.
+2. Type `crontab -e` to edit the crontab. If it's your first time, you might be asked to choose an editor; `nano` is a good default.
+3. Add the following line at the end of the file:
+
+   ```bash
+   @reboot python3 /path/to/your/data_logger_loadcell.py
+   ```
+
+   Replace `/path/to/your/data_logger_loadcell.py` with the full path to your script.
+4. Save and close the editor (`Ctrl + X`, then `Y`, then `Enter` if you're using `nano`).
+
+### Using Systemd Service
+
+1. Create a new service file for your script:
+
+   ```bash
+   sudo nano /etc/systemd/system/data_logger.service
+   ```
+
+2. Add the following content to the file:
+
+   ```ini
+   [Unit]
+   Description=Data Logger Service
+   After=multi-user.target
+
+   [Service]
+   Type=simple
+   User=pi
+   ExecStart=/usr/bin/python3 /path/to/your/data_logger_loadcell.py
+
+   [Install]
+   WantedBy=multi-user.target
+   ```
+
+   Replace `/path/to/your/data_logger_loadcell.py` with the full path to your script. Adjust `User=pi` if your script should run as a different user.
+
+3. Save and exit the editor.
+4. Reload the systemd manager configuration:
+
+   ```bash
+   sudo systemctl daemon-reload
+   ```
+
+5. Enable the service to start on boot:
+
+   ```bash
+   sudo systemctl enable data_logger.service
+   ```
+
+6. (Optional) To start the service immediately without rebooting:
+
+   ```bash
+   sudo systemctl start data_logger.service
+   ```
+
+### Choosing a Method
+
+Both methods will start your script at boot. `crontab` is simpler but systemd services offer more control and flexibility, such as automatic restarts on failure and logging. For most use cases, especially if you want your script to behave like a background service, creating a systemd service is recommended.
+
+000000----------------------------------------------------------------------
+@reboot python3 /home/kitenrg/kitepod/data_logger_loadcell.py
+
+sudo nano /etc/systemd/system/data_logger.service
+
+[Unit]
+Description=Data Logger Service
+After=multi-user.target
+
+[Service]
+Type=simple
+User=kitenrg
+ExecStart=/home/kitenrg/kitepod/bin/python3 /home/kitenrg/kitepod/data_logger_loadcell.py
+
+[Install]
+WantedBy=multi-user.target
+
+sudo systemctl daemon-reload
+sudo systemctl enable data_logger.service
+
+sudo systemctl start data_logger.service
+sudo nano /etc/systemd/system/data_logger.service
+
+
+#permission ERROR add this:
+sudo chown kitenrg:kitenrg /home/kitenrg/kitepod/modbus_data.csv
+sudo chown kitenrg:kitenrg /home/kitenrg/kitepod
+
+sudo chmod +w /home/kitenrg/kitepod/modbus_data.csv
+sudo chmod +w /home/kitenrg/kitepod
+
+
+#Open the data logger and do this tings in the end to make sure that we have access correctly to write and save the data: resolve the permission
+sudo nano /etc/systemd/system/data_logger.service
+
+[Service]
+User=kitenrg
+WorkingDirectory=/home/kitenrg/kitepod
+ExecStart=/home/kitenrg/kitepod/pod/bin/python3 /home/kitenrg/kitepod/data_logger_loadcell.py
+
+sudo systemctl daemon-reload
+sudo systemctl restart data_logger.service
+
+sudo systemctl status data_logger.service

@@ -1,0 +1,8 @@
+This is just a file for the description of the whole program
+What I am basically doing is that
+
+- first set basic configuration of the Modbus(Port, Buadrate, bytsize, parity, stopbite, and all the parameters that needed, like slave_id)
+- then using the proper command should establish a connection, if it's connect try to read some data from the holding registers to make sure secure connection
+
+
+https://github.com/BaharakQaderi/POD_Data_logger
