@@ -1,2 +1,14 @@
 pod/
 repl/
+examples/
+MT_Software_Suite_linux-x64_2022.0/
+include/
+repl/
+python/
+lib/
+Xsens_MTi_Serial_Reader-main/
+xsens_ros_mti_driver/
+Xsens_MTi_Serial_Reader-main/
+public/
+doc/
+Xsens Technologies MT SS License Agreement.rtf

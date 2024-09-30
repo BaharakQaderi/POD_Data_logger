@@ -33,3 +33,41 @@ GPIO.cleanup()  # Clean up GPIO settings
 change also this:
 
 datetime.utcnow()
+
+
+------------------------------------
+sudo systemctl stop data_logger.service
+
+To stop the service you've created, update the code, and then restart the service, follow these steps:
+
+1. **Stop the Service**:
+   Use the `systemctl` command to stop the service. Replace `data_logger_loadcell.service` with the name of your service file if it's different.
+   ```sh
+   sudo systemctl stop data_logge2024-08-05r_loadcell.service
+   ```
+
+2. **Update Your Code**:
+   - Make the necessary changes to your `data_logger_loadcell.py` script or any other files that are part of your service.
+   - Save your changes.
+
+3. **Test Your Updated Script**:
+   Before restarting the service, it's a good idea to manually test your script to ensure it runs as expected.
+   ```sh
+   python3 /path/to/your/script/data_logger_loadcell.py
+   ```
+   Replace `/path/to/your/script/` with the actual path to your script.
+
+4. **Restart the Service**:
+   Once you're satisfied with the updates and the script runs correctly, restart the service to apply the changes.
+   ```sh
+   sudo systemctl start data_logger.service
+   ```
+
+5. **Check the Service Status**:
+   To ensure the service has started successfully and is running without issues, check its status.
+   ```sh
+   sudo systemctl status data_logger.service
+   ```
+   Look for any errors in the output that might indicate problems with starting the service.
+
+By following these steps, you can safely stop your service, update your code, test the changes, and restart the service to apply the updates.

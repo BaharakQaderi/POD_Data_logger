@@ -6,13 +6,21 @@ import struct
 import time
 import csv  # Import the csv module
 import os
+import RPi.GPIO as GPIO
+
+# logging.basicConfig(level=logging.DEBUG)
+# log = logging.getLogger()
 
 # Configuration
 PORT = '/dev/serial0'  # Adjust based on your setup
-BAUDRATE = 9600
+BAUDRATE = 9600     
 SLAVE_ID = 3
-LOGFILE = 'modbus_data.csv'  # Change the extension to .csv
-BUFFER_SIZE = 10  # Number of readings before flushing to disk
+LOGFILE = 'modbus_data.csv'
+BUFFER_SIZE = 10
+GPIO_PIN = 4  # Set this to your GPIO pin number
+GPIO.setmode(GPIO.BCM)  # Use Broadcom pin numbering
+GPIO.setup(GPIO_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # Set the pin as an input
+
 
 def main():
     client = ModbusSerialClient(
@@ -37,7 +45,7 @@ def main():
             csv_writer = csv.writer(file)
             if mode == 'w':
                 # Write the CSV headers only if the file is new or empty
-                csv_writer.writerow(['Timestamp', 'Net Weight'])
+                csv_writer.writerow(['Timestamp', 'Net Weight', 'GPIO Value'])
             try:
                 while True:  # Change this condition to stop based on your requirement
                     if os.path.exists("stop.txt") :
@@ -52,8 +60,10 @@ def main():
                             net_weight = (weight_registers[0] << 16) + weight_registers[1]
                             net_weight_bytes = struct.pack('>I', net_weight)
                             net_weight_float = struct.unpack('>f', net_weight_bytes)[0]
-                            data_buffer.append([datetime.now(), net_weight_float])
-                            print(f"Logged NET WEIGHT: {datetime.now(), net_weight_float}")
+                            # data_buffer.append([datetime.now(), net_weight_float])
+                            gpio_value = GPIO.input(GPIO_PIN)  # Read the value of the GPIO pin
+                            data_buffer.append([datetime.utcnow(), net_weight_float, gpio_value])  # Append the GPIO value to the data buffer
+                            print(f"Logged NET WEIGHT: {datetime.utcnow(), net_weight_float, gpio_value}")  
                             # Write the timestamp and weight to the CSV file
                             # csv_writer.writerow([datetime.now(), net_weight_float])
 
